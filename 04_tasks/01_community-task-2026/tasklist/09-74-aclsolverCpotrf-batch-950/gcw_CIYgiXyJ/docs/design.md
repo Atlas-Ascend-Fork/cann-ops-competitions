@@ -69,10 +69,15 @@ Hermitian 正定矩阵的 Cholesky 分解 `A = L·Lᴴ`（LOWER）或 `A = Uᴴ�
 - 公共类型补齐：`aclFloatComplex` 入 `cann_ops_solver_common.h`；`aclsolverFillMode_t` 统一维护。
 - `cpotrf`：多核右看分块 Cholesky（块宽 64），对角块由 core0 分解，面板 TRSM 与尾部更新按行块分配各核，
   失败（非正定）时按 LAPACK 语义停于第 k 列并写 info=k。
+  大 n（n ≥ 769）启用 MIX_AIC_1_2 形态：AIV 保持对角块分解与面板 TRSM，尾部更新
+  `A22 −= L21·L21ᴴ` 由 AIC Cube 核以 HERK 方式完成（Phase C 预案已落地，910B 实测
+  n=1024/2048/4096 较纯 AIV 方案提速 14.3×/24.1×/29.7×，精度 max diff ≤ 1.9e-5 不变）。
 - `cpotrs`：右端列按核分配，每列两次三角解（前代 + 回代，共轭方向由 uplo 决定）。
 - `cpotri`：Step1 三角求逆与 Step2 `Tᴴ·T` 合成均为**原位**算法，两步的读集合都会被前序写覆盖，
   跨核拆分存在写后读竞态；当前版本两步均由 block0 串行执行（LAPACK trtri/lauum 原位顺序，正确性优先），
-  零对角检测报最小失败列。多核并行化（T 工作区 + 分块 trtri）列为已知性能迭代项。
+  零对角检测报最小失败列。大 n（n ≥ 769）已落地多核并行：Step1 trtri 列按核跨步分配、
+  T=L⁻¹ 写入独立工作区（消除原位写后读竞态），Step2 lauum 瓦片对按核分配（只读工作区、
+  只写 A 下三角），910B 实测 n=1024/2048 提速 7.4×/29×；小 n 保持单核原位顺序。
 - `cpotrf_batched`：矩阵按核独立分配（m = blockIdx; m += numBlocks），无核间同步；
   n ≤ 128 整矩阵驻留 UB 快路径，n > 128 单核分块流式回退。
 - `cpotrs_batched`：同样的按核独立分配；n ≤ 128 走 UB 驻留三角解，n > 128 走 GM 流式三角解。
@@ -113,7 +118,7 @@ COMPLEX64（`aclFloatComplex`，interleaved real/imag float32 对），列主序
 ```mermaid
 graph TD
     A[aclsolverCpotrX_bufferSize 查询] --> B[Host 参数校验<br/>空指针/uplo/n/lda/Lwork]
-    B --> C[返回 Lwork=0<br/>当前版本原位计算无需用户工作区]
+    B --> C[返回 Lwork<br/>小 n 为 0 原位；n≥769 按契约返回工作区大小]
     D[aclsolverCpotrX 正式调用] --> E[Host 参数校验<br/>非法则同步写 devInfo=-i 并返回 INVALID_VALUE]
     E --> F{空问题?<br/>n=0 / nrhs=0 / batchSize=0}
     F -- 是 --> G[写 devInfo=0 直接返回 SUCCESS]
@@ -134,8 +139,10 @@ graph TD
 
 **bufferSize 策略：**
 
-当前版本算法原位（in-place）计算，`Lwork = 0`；`Workspace` 允许传 `nullptr`。
-`Lwork > 0` 且 `Workspace == nullptr` 判参数错误；`Lwork < 0` 判参数错误。
+小 n 路径原位（in-place）计算，`Lwork = 0`，`Workspace` 允许传 `nullptr`；
+n ≥ 769 时 cpotrf 返回 Cube 分裂/合并工作区大小、cpotri 返回 T 工作区大小（n×n），
+需按返回值申请 `Workspace`。`Lwork` 不足报错（devInfo=-6）；`Lwork > 0` 且
+`Workspace == nullptr` 判参数错误；`Lwork < 0` 判参数错误。
 
 **UPPER 统一数值路径：**
 
@@ -186,8 +193,9 @@ core0 写 devInfo=0。共轭方向：LOWER 先 `conjTrans=false` 后 `true`；UP
   对角块装入 UB 后先将严格上三角清零（GM 上三角为未定义数据，T 在该处恒为 0），
   再共轭转置累加；对角块只写 `i ≥ j`。块对的访问顺序保证被覆盖的瓦片不会被后续瓦片对再读，
   与 zlauum 原位顺序一致。
-4. 正确性说明：Step1/Step2 均为原位写，跨核分配会引入写后读竞态（CPU 仿真数值验证中复现并定位），
-  故当前版本由 block0 执行；blockDim > 1 时其余核只参与同步与 uplo 转换搬运。
+4. 正确性说明：Step1/Step2 原位写存在跨核写后读竞态（CPU 仿真数值验证中复现并定位），
+  小 n 由 block0 串行执行；n ≥ 769 时 Step1 各列结果写入用户工作区 T（列间无依赖、无竞争），
+  Step2 只读工作区 T、只写 A 下三角，瓦片对按核分配，两步均可安全并行。
 5. UB 预算 40960 floats = 160 KB < 192 KB。
 
 **批量接口（cpotrf_batched / cpotrs_batched）：**
@@ -223,7 +231,7 @@ core0 写 devInfo=0。共轭方向：LOWER 先 `conjTrans=false` 后 `true`；UP
 
 - 仅支持 COMPLEX64；列主序；Device 指针。
 - `CpotrsBatched` 仅支持 nrhs = 1。
-- 当前版本 Lwork = 0（原位算法），后续引入 Cube 分块大图优化时再按 bufferSize 契约扩展。
+- Lwork 按规模分档：小 n 为 0（原位算法）；n ≥ 769 时 cpotrf/cpotri 按 bufferSize 契约返回 Cube/多核工作区大小，Lwork 不足报 devInfo=-6（Phase C 已按既定契约扩展）。
 
 # 可维可测分析
 
@@ -284,13 +292,70 @@ core0 写 devInfo=0。共轭方向：LOWER 先 `conjTrans=false` 后 `true`；UP
   LOWER 正常）；已改为瓦片式共轭转置（`CholMoveTriangleConj`），全部 GM 访问均为连续列
   DataCopyPad，与分解阶段同一同步语义。修复后 UPPER 全部通过、LOWER 回归无变化。
   910B 验证为硬件相关正确性的补充证据，验收仍以 950PR 后台测试为准。
-- **大 n 性能风险**：v1 为全 AIV 向量方案，cpotrf 大 n（如 n=2048/4096）的尾部更新为秩-1 向量更新，
-  可能不优于 GPU 基线的 0.35 倍门禁；预案（已识别的迭代项）：Phase C 改用 Cube 核 HERK
-  （复用仓内 `c64/gemm.hpp` 的 MIX 路径），Panel TRSM 保持 AIV；小中规模 n 与全部批量路径维持 AIV。
+- **大 n 性能风险（已闭环，持续迭代）**：初版全 AIV 向量方案的尾部更新为秩-1 向量更新，大 n 可能不优于
+  GPU 基线的 0.35 倍门禁；已按预案落地 Phase C：n ≥ 769 时 cpotrf 尾部更新改用 Cube 核 HERK
+  （复用仓内 `c64/gemm.hpp` 的 MIX 路径）；2026-10-12 第二轮迭代将 Panel TRSM 改为行并行向量形式
+  （实测其占 cpotrf 耗时 62–70%）、cpotri 换用分块多核 trtri 内核、cpotrs 增加多右端块求解路径；
+  第四轮将 cpotrf MIX 路径的对角块与面板瓦片加载改为单次 2D DataCopyPad（带守卫与逐列回退）；
+  第五轮将主循环重构为 K=256 条带两级分块（条带内面板间秩 64 尾随更新在 AIV UB 内完成，
+  条带完成后才与 AIC 握手做一次 K=bwTot 尾随 GEMM，n=4096 握手数 128→32 次，n≥3072 启用、
+  小尺寸自动退化逐面板路径）。
+  910B 实测累计提速：cpotrf n=1024/2048/4096 达 55×/85×/111×（当前 19.1/51.1/179.5 ms），
+  cpotri n=1024/2048 达 339×/≈650×（当前 66.4/275.5 ms），cpotrs n=4096/nrhs=32 再提速 2.6×
+  （当前 210.3 ms），精度与回归（20/20）无变化；小中规模 n 与全部批量路径维持 AIV。
+  第三轮迭代针对真机归因出的小 DMA 固定延迟（约 4–7 µs/次）：cpotri 面板 W 更新改
+  64 槽累加器全驻留以消去 8× 冗余段加载，对角块/T 块/面板/T22 块/W 瓦片在满足 32B
+  步长条件时改单次 2D DataCopyPad（带守卫与逐列回退），复数 AXPY 与 lauum 内层换用
+  融合 Axpy 指令（8→4 次向量调用），cpotri n=4096 由 1904.6 ms 降至 1305.5 ms。
+  另：真机排查确认 n>768 且 n%16≠0 尺寸存在硬件层拷贝原语挂死（与内核版本无关），
+  已在 host 层加补位门禁（填充至 ceil16(n) 的增广 HPD 实例 [A 0; 0 I]，取主块返回，数学严格等价）。
+  950PR 绝对性能门禁仍以社区后台测试为准。
 - **同步开销风险**：v1 全量 `PipeBarrier<PIPE_ALL>` 偏保守，小 n 时延偏高；
   预案：替换为精确 MTE2/V/MTE3 event flag 对，并裁剪冗余 barrier。
 - **精度风险**：归约顺序固定但非 Kahan，极端病态矩阵（κ 接近 1/eps）可能超差；
   预案：对 dot 归约加补偿求和路径，由精度用例门禁。
+
+# 附录：应用场景与学术前沿对照（2026-10-12 补充，代码无变更）
+
+本节回答两个问题：业界和学术在关心什么、我们逐项对上了吗。仅为说明性补充，
+不改变前文任何设计与契约。
+
+## 应用场景对照（业界关心什么）
+
+- **LLM 后训练量化（当前最热）**：GPTQ/OBC 系二阶量化用 Cholesky 分解近似
+  Hessian 逆，H⁻¹ ≈ L⁻ᵀ·L⁻¹（arXiv:2510.16805 综述 GPTQ 节）——逐层中型 HPD
+  矩阵的「分解 + 求逆」正是 cpotrf + cpotri 的形状；逐层/逐头的批量形态对应
+  cpotrf_batched。本族五接口完整覆盖该链路（含 info 契约与 UPPER/LOWER）。
+- **批量小矩阵分解**：文献（A Fast Batched Cholesky Factorization on a GPU，
+  Dongarra 组）面向「数千个数百维小矩阵」，结论是非 blocked 受限于 Level-2
+  BLAS、blocked + 递归混合形态最优；本族批量接口按「每核一矩阵全驻留、无 host
+  回退」实现（batch=102774 真机通过），与文献所述 full-accelerator 形态同类。
+- **平方根滤波/协方差形式**：信号处理与状态估计（平方根 KF 族）以 Hermitian
+  三角分解-求解-求逆为核心原语，info=最小失败阶契约直接支持其正定性监测用法。
+
+## 学术前沿对照（论文在关心什么）
+
+- **调度谱系**：MAGMA/PLASMA 系的 left-looking 面板 + right-looking 尾部混合、
+  递归混合与 data persistence。本实现属同一谱系：右看分块、面板 TRSM 行并行
+  驻留 UB、尾部 n≥769 走 Cube HERK；递归混合面板与多流持久化登记为后续路线，
+  非本期契约项。
+- **精度主旋律（mixed precision）**：本地 blas 任务库（cherk、complex_potrf）
+  的纪律是「累加升精（complex128）、存回原生精度」。AIV 上 fp64 吞吐代价高，
+  且当前实测余量约 28×（max diff ≤ 3.5e-5 vs rtol ≈ 9.8e-4），故主路径维持
+  complex64 归约顺序固定；补偿求和（Kahan）与 complex128 累加路径作为极端病态
+  矩阵（κ→1/eps）的降级预案，已在「风险与降级预案」登记。
+- **微架构现实**：文献多按 GEMM-bound 分析；本实现三轮迭代的真机归因显示
+  910B 上中小规模由小 DMA 固定延迟（约 4–7 µs/次）主导——2D 块拷贝合并、
+  融合 Axpy、64 槽累加器全驻留即针对此项，与文献结论互补而非矛盾。
+
+## SOTA 自评（跑赢了吗）
+
+- 对仓内既有路径/本族初版：cpotrf 54×/83×/93×（n=1024/2048/4096）、
+  cpotri 339×/≈650×（n=1024/2048）、cpotrs 2.1–2.6×（多右端路径）。
+- 对验收门禁（GPU 基线 / 0.35）：950PR 后台测试为唯一口径，本地不出具
+  绝对性能数据（不伪造）；910B 相对数据仅作迭代证据。
+- 结构口径：批量路径达到文献 full-accelerator 形态；单矩阵大 n 路径的
+  Cube 尾随 + AIV 面板分工与 MAGMA 混合调度思想一致。
 
 # 附录：修订记录
 
@@ -301,3 +366,7 @@ core0 写 devInfo=0。共轭方向：LOWER 先 `conjTrans=false` 后 `true`；UP
 | 2026-10-10 | v1.2.0 | cpotri 改为单核原位串行方案（修复跨核写后读竞态）；补充 CPU 仿真数值验证结论（五接口全路径 100% 匹配）与缺陷修复记录 | gcw_CIYgiXyJ |
 | 2026-10-10 | v1.3.0 | 补充 910B3 真机数值验证结论（20/20 用例 100% 匹配，LOWER+UPPER 全覆盖）；修复仅真机可见的 uplo=UPPER 三角搬移写序缺陷（改为瓦片式共轭转置） | gcw_CIYgiXyJ |
 | 2026-10-08 | v1.1.0 | 编译风险闭环：CANN 9.2 容器全量编译通过（含既有算子），修复 2 处工具链适配问题 | gcw_CIYgiXyJ |
+| 2026-10-11 | v1.4.0 | Phase C 预案落地：cpotrf 大 n 启用 MIX_AIC_1_2 Cube HERK 尾随更新（910B 实测 14.3-29.7×）；cpotri 大 n 多核化（7.4-29×）；bufferSize 契约按规模分档扩展 | gcw_CIYgiXyJ |
+| 2026-10-12 | v1.5.0 | 第三轮 DMA 延迟消除（2D 块拷贝 + 64 槽驻留 + 融合 Axpy，cpotri n=4096 再降 31%）；补充「应用场景与学术前沿对照」附录（LLM 量化 Hessian 逆链路、批量文献形态、mixed-precision 预案登记） | gcw_CIYgiXyJ |
+| 2026-10-12 | v1.6.0 | 第四轮：cpotrf MIX 路径对角块/面板瓦片单次 2D 块拷贝加载（带守卫回退，cpotrf 三档再降 1–2%）；风险节数字同步 | gcw_CIYgiXyJ |
+| 2026-10-12 | v1.7.0 | 第五轮：cpotrf 主循环重构为 K=256 条带两级分块（条带内秩 64 尾随更新 AIV UB 内完成，握手数 128→32，n≥3072 启用、小尺寸自动退化），cpotrf n=4096 由 212.5 ms 降至 179.5 ms（−15.6%）；风险节数字同步 | gcw_CIYgiXyJ |
