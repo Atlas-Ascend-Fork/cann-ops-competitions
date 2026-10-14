@@ -292,5 +292,30 @@
 | 81 | 9月社区任务-aclblasSgemmGroupedBatched算子开发(A2/A3) |
 | 82 | 9月社区任务-aclblasStrmm算子开发(A2/A3) |
 
+### 10月份发放的任务
+
+| 任务编号 | 任务名称 |
+| --- | --- |
+| 1 | 10月社区任务-单精度实数LU分解、求解和批量求逆(950) |
+| 2 | 10月社区任务-单精度复数LU分解、求解和批量求逆(950) |
+| 3 | 10月社区任务-单精度实数QR分解与最小二乘(950) |
+| 4 | 10月社区任务-单精度复数QR分解与最小二乘(950) |
+| 5 | 10月社区任务-Wan2.2-I2V MatMul INT8 量化 |
+| 6 | 10月社区任务-Wan2.2-I2V 使能 TaylorSeer、Offload 与 Prefetch |
+| 7 | 10月社区任务-Gemma-4-E2B 推理样例 |
+| 8 | 10月社区任务-daVinci-MagiHuman MatMul INT8 量化 |
+| 9 | 10月社区任务-daVinci-MagiHuman冗余Cast算子消除 |
+| 10 | 10月社区任务-daVinci-MagiHuman RoPE优化 |
+| 11 | 10月社区任务-LingBot-VA模型接入与LIBERO评测 |
+| 12 | 10月社区任务-指数分布后处理融合算子开发 |
+| 13 | 10月社区任务-ops-nn算子onnx适配 |
+| 14 | 10月社区任务-ops-math算子onnx适配 |
+| 15 | 10月社区任务-实现hccl4py |
+| 16 | 10月社区任务-HY-Embodied-0.5-X模型接入与EmbSpatial-Bench评测 |
+| 17 | 10月社区任务-Qwen3-1.7B 模型样例 |
+| 18 | 10月社区任务-daVinci-MagiHuman FA MXFP8 量化 |
+| 19 | 10月社区任务-Cosmos3模型T2I、I2I、T2V+Sound场景适配 |
+| 20 | 10月社区任务-Alpamayo-R1图模式与预取优化 |
+
 ## 参考链接
 社区任务发放页面：https://gitcode.com/org/cann/discussions/22
