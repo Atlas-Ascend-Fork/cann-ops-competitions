@@ -8,6 +8,7 @@
 |------|------|
 | `operator-challenge-champ2/` | 算子挑战赛-冠军赛，包含 4 个赛题：Erfinv、GeluV2、IsNan、TensorEqual |
 | `cann-ops-challenge-S8/` | S8赛季-算子挑战赛，包含 5 个赛题：Assign、Atanh、Fills、Scale、Unpack |
+| `cann-ops-challenge-S9/` | S9赛季-算子挑战赛，包含 5 个赛题：Concat、Greater、IndexAdd、Transpose、SquareSumV1 |
 
 ## 提交目录
 
