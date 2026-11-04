@@ -246,6 +246,11 @@ tile 划分 `mTiles/nTiles/tileM/tileN`、批数区间 `batchStart/batchCount`�
    - grid-stride 遍历 `totalCubeTasks`，用**二分查找**定位任务所属的组；
    - **只执行与本特化匹配的任务**（`isTransA/isTransB` 匹配、`tileN ≤ 128` 匹配尺寸档），其余跳过；
    - 匹配上之后调用对应模板参数的 `RunOneGroupedTask`。
+   - **组记录本地缓存**：二分查找命中后，组的描述（`GroupedGemmGroupData`）被拷到设备侧
+     的本地存储并被后续同组的任务复用，避免每个任务都从 GM 重新读一遍组记录；
+     特化过滤（`isTransA/isTransB`/`tileN`）在**拷贝组记录之前**完成，
+     因此不属于本特化的组不付这次拷贝的代价；
+   - 查找复杂度为 O(log groupCount)，与组数无关。
 2. **Cube 实例按 block 复用**：`TPipe` 与 `MatmulT` 实例在**每个 block 内只建一次**，
    tile 只改变 launch 的形状，不重建 Cube 的资源。实测重建的开销在小 shape 上与 tile
    本身相当，这是把 7 条不达标的性能用例拉回标杆以内的关键改动之一。
@@ -328,7 +333,7 @@ tile 划分 `mTiles/nTiles/tileM/tileN`、批数区间 `batchStart/batchCount`�
 
 ## 实测结果（Atlas A2 · Ascend 910B1 · CANN 8.5.0）
 
-> 被测提交 `312ddb2`（代码 MR !752 head），下表数据在该提交对应的构建（`build_gg11`）上实跑采集；
+> 被测提交 `dfbe769`（代码 MR !752 head，消除 CI CodeCheck 的 2 条「重复代码[C++]」告警：分组二分查找提取为共享头模板 `FindGroupIndexByTaskStart<StartPolicy>`、测试侧提取 `FillFloatDefaults`；**算子数值逻辑与用例判定逻辑均未改变**），下表数据在该提交对应的构建（`build_gg11`）上实跑采集；
 > 其中 2 条用例因首次采集时 msprof 采样文件异常（`device_5` 缺失）已剔除后补采，
 > 最终参与判定的为随包 CSV 的全部 200 条。
 
@@ -338,7 +343,7 @@ tile 划分 `mTiles/nTiles/tileM/tileN`、批数区间 `batchStart/batchCount`�
 | 验收项 | 判据 | 实测 |
 | --- | --- | --- |
 | 精度（§3.2） | `matched_ratio ≥ 0.99`、`max_abs_error ≤ max(1e-2, 32×ULP)`、`alpha=0` 位精确 | **1200 / 1200 全部通过**；`matched_ratio` 最小 **0.9926**，`max_abs_error` 最大 **2.69e-03** |
-| 性能（§3.3） | 平均单次耗时 ≤ GPU 标杆 × 1.25 | **200 / 200 全部达标**；`msprof op` 单算子 Task Duration 与 GPU 标杆之比中位 **0.263**、最大 **0.677**（最小 0.036） |
+| 性能（§3.3） | 平均单次耗时 ≤ GPU 标杆 × 1.25 | **200 / 200 全部达标**；`msprof op` 单算子 Task Duration 与 GPU 标杆之比中位 **0.266**、最大 **0.623**（最小 0.036） |
 | 内存（§3.4） | 不涉及 | workspace/输入输出数据量最大 **0.0508**（≤ 1.2） |
 
 性能采样口径为 §3.3.1 规定的 `msprof op` 单算子 Task Duration，每例 warmup 5 次后取 50 个有效样本的均值；
