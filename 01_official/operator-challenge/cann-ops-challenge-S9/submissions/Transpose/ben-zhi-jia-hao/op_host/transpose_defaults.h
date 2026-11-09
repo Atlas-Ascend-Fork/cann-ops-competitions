@@ -1,0 +1,9 @@
+#ifndef TRANSPOSE_DEFAULTS_H
+#define TRANSPOSE_DEFAULTS_H
+#ifndef TP_DEFAULT_GROUP
+#define TP_DEFAULT_GROUP 1
+#endif
+#ifndef TP_DEFAULT_SUFFIX
+#define TP_DEFAULT_SUFFIX 1
+#endif
+#endif
