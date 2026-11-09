@@ -1,0 +1,37 @@
+{
+  "operator": "SquareSumV1",
+  "team": "锄大地",
+  "team_directory": "chu-da-di",
+  "source_version": "op41 chunked128",
+  "archive_name": "SquareSumV1.zip",
+  "archive_sha256": "eb5d16f111026efe6f08a60bae607673c8d0d9b3c9944e6e5fb4066f4ad4381e",
+  "source_files": [
+    {
+      "path": "op_kernel/square_sum_v1.cpp",
+      "archive_member": "SquareSumV1_zip/op_kernel/square_sum_v1.cpp",
+      "bytes": 214078,
+      "sha256": "01bcd87a8590bc3447863b67aa8f252df2fe87565c818dd7a6df763dc74b6246",
+      "archive_bytes": 214078,
+      "archive_sha256": "01bcd87a8590bc3447863b67aa8f252df2fe87565c818dd7a6df763dc74b6246"
+    },
+    {
+      "path": "op_host/square_sum_v1_tiling.h",
+      "archive_member": "SquareSumV1_zip/op_host/square_sum_v1_tiling.h",
+      "bytes": 1650,
+      "sha256": "df8e3d53372f679e287e3393be9d9e9ad39c1cb2e752d317cc76e5111a1a8489",
+      "archive_bytes": 1650,
+      "archive_sha256": "df8e3d53372f679e287e3393be9d9e9ad39c1cb2e752d317cc76e5111a1a8489"
+    },
+    {
+      "path": "op_host/square_sum_v1.cpp",
+      "archive_member": "SquareSumV1_zip/op_host/square_sum_v1.cpp",
+      "bytes": 55010,
+      "sha256": "aedf808ca47cafee69445158eb75b7a30468664eaa6b1bf441090b2432d4110b",
+      "archive_bytes": 55010,
+      "archive_sha256": "aedf808ca47cafee69445158eb75b7a30468664eaa6b1bf441090b2432d4110b"
+    }
+  ],
+  "preparation": "Only CRLF and repeated-CR line endings are normalized to LF; all other source bytes match the final online archive.",
+  "merge_adapters": [],
+  "metadata_tests": []
+}
