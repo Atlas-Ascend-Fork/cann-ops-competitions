@@ -1,0 +1,40 @@
+{
+  "version": "v45-tight",
+  "archive": "ConcatCustom-v45-tight.zip",
+  "archive_sha256": "c11963b8f939b559685624909f4cedaf89afa85689ac5998a79dfec2f84cab0a",
+  "original_source_sha256": {
+    "op_kernel/concat.cpp": "58e308ccff10c36d7428841e5786ce994c69707f236c391e6038b589e15eb3bb",
+    "op_kernel/s9_platform.h": "4b4f5520ff8131460350eaa5e7165f97a82dbd542523eae1d210b08b00eff1e9",
+    "op_kernel/s9_env.h": "700963df07eeb0c9cd35229f91f45e9cc49ea06cac863a56eab084133a3ace0b",
+    "op_kernel/s9_tiling_calc.h": "200435df193efb840554c0c87959e9c5be4e99411186e278612a62f91163e1d0",
+    "op_kernel/s9_concat_layout.h": "0228a138666f45586a4eb4162b8bed5950d0ec733bf2767189a2c3f067c01e65",
+    "op_host/concat.cpp": "8c51610aeee84cfb1e7c4c2dac8b3f82d7e7294cd72072752a772065a0f00224",
+    "op_host/s9_platform.h": "4b4f5520ff8131460350eaa5e7165f97a82dbd542523eae1d210b08b00eff1e9",
+    "op_host/s9_env.h": "700963df07eeb0c9cd35229f91f45e9cc49ea06cac863a56eab084133a3ace0b",
+    "op_host/s9_tiling_calc.h": "200435df193efb840554c0c87959e9c5be4e99411186e278612a62f91163e1d0",
+    "op_host/concat_tiling.h": "eb144c0fff25d60eea8662da289fbcead63b61bdc4fd1c63a64eca9f1c6e797f",
+    "op_host/s9_concat_layout.h": "0228a138666f45586a4eb4162b8bed5950d0ec733bf2767189a2c3f067c01e65"
+  },
+  "integration_changes": [
+    "Remove unused non-Concat tiling functions and constants.",
+    "Remove cross-operator historical comments in platform/tiling headers.",
+    "Provide standalone CANN 8.5 build support and Concat-only tests.",
+    "Normalize whitespace in generated build scaffolding; entrypoint bytes unchanged."
+  ],
+  "leaderboard": {
+    "team": "BatchLions",
+    "rank": 10,
+    "total_us": 348.33,
+    "source": "User-provided final leaderboard screenshot; not rerun during integration."
+  },
+  "integrated_source_sha256": {
+    "op_host/s9_concat_layout.h": "0228a138666f45586a4eb4162b8bed5950d0ec733bf2767189a2c3f067c01e65",
+    "op_host/s9_env.h": "700963df07eeb0c9cd35229f91f45e9cc49ea06cac863a56eab084133a3ace0b",
+    "op_host/concat.cpp": "8c51610aeee84cfb1e7c4c2dac8b3f82d7e7294cd72072752a772065a0f00224",
+    "op_host/concat_tiling.h": "eb144c0fff25d60eea8662da289fbcead63b61bdc4fd1c63a64eca9f1c6e797f",
+    "op_host/s9_platform.h": "a12e67838686db01543729df5393ecddf91fd7466ce15726ee24279640fb928d",
+    "op_host/s9_tiling_calc.h": "3281752977e3a7665500d51a81e08c789b99c4cac490164f205df610b5a3436b",
+    "op_kernel/s9_concat_layout.h": "0228a138666f45586a4eb4162b8bed5950d0ec733bf2767189a2c3f067c01e65",
+    "op_kernel/concat.cpp": "58e308ccff10c36d7428841e5786ce994c69707f236c391e6038b589e15eb3bb"
+  }
+}

@@ -1,0 +1,9 @@
+Concat implementation and tests
+Copyright (c) 2026 ascend_simula contributors
+SPDX-License-Identifier: Apache-2.0
+
+The CMake and packaging support is generated CANN 8.5 project scaffolding.
+Original copyright notices are retained in the generated files.
+
+makeself is third-party packaging tooling. Its original source notices and
+license are retained under cmake/util/makeself/.

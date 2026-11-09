@@ -1,0 +1,43 @@
+[
+ {
+  "op": "Concat",
+  "language": "cpp",
+  "input_desc": [
+   {
+    "name": "x",
+    "param_type": "dynamic",
+    "format": [
+     "ND"
+    ],
+    "type": [
+     "float16",
+     "float",
+     "int32",
+     "int8"
+    ]
+   }
+  ],
+  "output_desc": [
+   {
+    "name": "y",
+    "param_type": "required",
+    "format": [
+     "ND"
+    ],
+    "type": [
+     "float16",
+     "float",
+     "int32",
+     "int8"
+    ]
+   }
+  ],
+  "attr": [
+   {
+    "name": "dim",
+    "type": "int",
+    "value": 0
+   }
+  ]
+ }
+]
