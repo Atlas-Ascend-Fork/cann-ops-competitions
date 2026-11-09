@@ -1,0 +1,16 @@
+{
+  "op": "SquareSumV1",
+  "version": "v91",
+  "cases": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "compile_target": "b3",
+  "simulator": false,
+  "real_device": "b3",
+  "submit": false,
+  "source_sha256": "2ea838ab2c96009306d57d8ca0e47a3c114d058754357edc62a275c3463ad7a3"
+}
