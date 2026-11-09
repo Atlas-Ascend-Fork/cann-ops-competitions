@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 19,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Transpose CANN 8.5.0 / Ascend 910B",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build_out",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Release"
+        },
+        "ENABLE_SOURCE_PACKAGE": {
+          "type": "BOOL",
+          "value": true
+        },
+        "ENABLE_BINARY_PACKAGE": {
+          "type": "BOOL",
+          "value": true
+        },
+        "ASCEND_COMPUTE_UNIT": {
+          "type": "STRING",
+          "value": "ascend910b"
+        },
+        "ENABLE_TEST": {
+          "type": "BOOL",
+          "value": false
+        },
+        "vendor_name": {
+          "type": "STRING",
+          "value": "customize"
+        },
+        "ASCEND_CANN_PACKAGE_PATH": {
+          "type": "PATH",
+          "value": "$env{ASCEND_HOME_PATH}"
+        },
+        "ASCEND_PYTHON_EXECUTABLE": {
+          "type": "STRING",
+          "value": "python3"
+        },
+        "CMAKE_INSTALL_PREFIX": {
+          "type": "PATH",
+          "value": "${sourceDir}/build_out"
+        },
+        "ENABLE_CROSS_COMPILE": {
+          "type": "BOOL",
+          "value": false
+        },
+        "ASCEND_PACK_SHARED_LIBRARY": {
+          "type": "BOOL",
+          "value": false
+        }
+      }
+    }
+  ]
+}
