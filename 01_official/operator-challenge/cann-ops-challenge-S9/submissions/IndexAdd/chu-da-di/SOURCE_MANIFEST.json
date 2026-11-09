@@ -1,0 +1,159 @@
+{
+  "operator": "IndexAdd",
+  "team": "锄大地",
+  "team_directory": "chu-da-di",
+  "source_version": "general DMA 20260913",
+  "archive_name": "IndexAdd_general_dma_20260913.zip",
+  "archive_sha256": "09c60f3b62bdfa7662a14f4d8836609efbc29ad06913a1e43495dd6eb3d14317",
+  "source_files": [
+    {
+      "path": "op_kernel/index_add_ordered.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_ordered.h",
+      "bytes": 13582,
+      "sha256": "c73bcbdad8428891258499cd97a9dd5f9f662fec1ee8d1b299dd613b1ff48aa1",
+      "archive_bytes": 13582,
+      "archive_sha256": "c73bcbdad8428891258499cd97a9dd5f9f662fec1ee8d1b299dd613b1ff48aa1"
+    },
+    {
+      "path": "op_kernel/index_add_transpose_waves.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_transpose_waves.h",
+      "bytes": 16779,
+      "sha256": "28407682500922683b014fdc1bf5ca18207f152b3b632dc5b1f12fa35a8b9025",
+      "archive_bytes": 16821,
+      "archive_sha256": "9e2bf9360fbb59a5b6b3a0b90db5f1b4d940bfcc14022aa22ec1edcf3582bb7c"
+    },
+    {
+      "path": "op_kernel/index_add_cached_int8.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_cached_int8.h",
+      "bytes": 3981,
+      "sha256": "de3011d8c2c0b418bc5a945df2dc91ce4e67079f4440da807dcc2839634cacd6",
+      "archive_bytes": 3981,
+      "archive_sha256": "de3011d8c2c0b418bc5a945df2dc91ce4e67079f4440da807dcc2839634cacd6"
+    },
+    {
+      "path": "op_kernel/index_add_float_ranked.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_float_ranked.h",
+      "bytes": 10210,
+      "sha256": "33dec2ba23cf15af8b1607c2a0856fc2a1c45ba9e38078549d456ef44b2c6e4f",
+      "archive_bytes": 10210,
+      "archive_sha256": "33dec2ba23cf15af8b1607c2a0856fc2a1c45ba9e38078549d456ef44b2c6e4f"
+    },
+    {
+      "path": "op_kernel/index_add_atomic_source.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_atomic_source.h",
+      "bytes": 3755,
+      "sha256": "8dffd44e64a8d5a0ffd1d132c1c52fb5c272c2d0942ac435f76c60d4470e05c9",
+      "archive_bytes": 3755,
+      "archive_sha256": "8dffd44e64a8d5a0ffd1d132c1c52fb5c272c2d0942ac435f76c60d4470e05c9"
+    },
+    {
+      "path": "op_kernel/index_add_half_impl.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_half_impl.h",
+      "bytes": 107622,
+      "sha256": "54027429f7c3eb6be06e84370e6298690807556cef146860435f5750b3aa3ee9",
+      "archive_bytes": 109501,
+      "archive_sha256": "83d6171cf7c0eb284587b5849735104e29471f307aef00cf66b0d59b47399ac5"
+    },
+    {
+      "path": "op_kernel/index_add_resident_bf16.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_resident_bf16.h",
+      "bytes": 7535,
+      "sha256": "9ca17087c37970fba48492139aaf003d8717f9cdf583a01fba9944635db6012b",
+      "archive_bytes": 7535,
+      "archive_sha256": "9ca17087c37970fba48492139aaf003d8717f9cdf583a01fba9944635db6012b"
+    },
+    {
+      "path": "op_kernel/index_add_half_ranked.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_half_ranked.h",
+      "bytes": 12479,
+      "sha256": "8af58f19d2ee693bbae8afd85901da75ac6a0b5bc812d6f5e26934d883b099c8",
+      "archive_bytes": 12479,
+      "archive_sha256": "8af58f19d2ee693bbae8afd85901da75ac6a0b5bc812d6f5e26934d883b099c8"
+    },
+    {
+      "path": "op_kernel/index_add_streaming_int32.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_streaming_int32.h",
+      "bytes": 4434,
+      "sha256": "2a2e9911295f4a8e1d7bbf2b91a241818736b214aefba4a350ebc6643261413e",
+      "archive_bytes": 4455,
+      "archive_sha256": "9a0be1024de2992a9fa0c62b3ce6b88d32afaf71cf5a5044e29fd929bf18b564"
+    },
+    {
+      "path": "op_kernel/index_add_float_impl.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_float_impl.h",
+      "bytes": 119758,
+      "sha256": "8dbe33464629677892037dddc96334458a88c73287b5093cc21c269bdf09fe00",
+      "archive_bytes": 121685,
+      "archive_sha256": "93bb6a92d5179aa5f9173b7ba3dd1c1f5ca44c60720c5b834566724135aeab48"
+    },
+    {
+      "path": "op_kernel/index_add_filtered.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_filtered.h",
+      "bytes": 19974,
+      "sha256": "6b0e3dcd965338beb3d84b2d54590c4b3bd8aa4553a81dd79d06ab636f35ba6d",
+      "archive_bytes": 19974,
+      "archive_sha256": "6b0e3dcd965338beb3d84b2d54590c4b3bd8aa4553a81dd79d06ab636f35ba6d"
+    },
+    {
+      "path": "op_kernel/index_add_common_impl.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_common_impl.h",
+      "bytes": 100479,
+      "sha256": "7ddf11012c26018e7f93871b4cd414f9e6f23a1663f41a4792a29082844fcc5c",
+      "archive_bytes": 102304,
+      "archive_sha256": "fe64bf0976ebe23a68d98bb17454120bdca186bb4cd8f36846949d8cd3920395"
+    },
+    {
+      "path": "op_kernel/index_add_tiled_axis.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_tiled_axis.h",
+      "bytes": 17643,
+      "sha256": "356652668a5fd756f4ec598c3f6538685551d01f2aeac0cb032031bb977ed7f7",
+      "archive_bytes": 17643,
+      "archive_sha256": "356652668a5fd756f4ec598c3f6538685551d01f2aeac0cb032031bb977ed7f7"
+    },
+    {
+      "path": "op_kernel/index_add.cpp",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add.cpp",
+      "bytes": 534,
+      "sha256": "ea6911a79cd3379644da9af0e8605840ff58cf64033e72ea866dc041462dbde4",
+      "archive_bytes": 534,
+      "archive_sha256": "ea6911a79cd3379644da9af0e8605840ff58cf64033e72ea866dc041462dbde4"
+    },
+    {
+      "path": "op_kernel/index_add_ordered_waves.h",
+      "archive_member": "IndexAdd_zip/op_kernel/index_add_ordered_waves.h",
+      "bytes": 15701,
+      "sha256": "f89a0d79fcf8382a22af6dd2aed1f4456ff7ca66ccefc5beadb610b5fa4b893f",
+      "archive_bytes": 15817,
+      "archive_sha256": "bac371080fa64dd6ce49df4c86ef25a3d68f3e128e9c8465eafbb42548436562"
+    },
+    {
+      "path": "op_host/index_add_tiling.h",
+      "archive_member": "IndexAdd_zip/op_host/index_add_tiling.h",
+      "bytes": 2782,
+      "sha256": "92abcc8057d81449dd02235e6226973c2d76a183e9c8ef74fb865411dbcd333d",
+      "archive_bytes": 2872,
+      "archive_sha256": "57ad032c5aa3a251ebfcc6eba6f1897a5c8e3ab8767b2bf53ef0dcf753bba504"
+    },
+    {
+      "path": "op_host/index_add.cpp",
+      "archive_member": "IndexAdd_zip/op_host/index_add.cpp",
+      "bytes": 63641,
+      "sha256": "0781a0d1f46752919c9bc4460a972d49da1ee56c3f0a0e3719defe066d099e25",
+      "archive_bytes": 64660,
+      "archive_sha256": "ae9032c14b7e0de8476e605c7f46065863b10df3941b090b1e3cbfb20d66e8cf"
+    }
+  ],
+  "preparation": "Only CRLF and repeated-CR line endings are normalized to LF; all other source bytes match the final online archive.",
+  "merge_adapters": [
+    {
+      "path": "op_host/infer_shape.cpp",
+      "sha256": "09b271cfa9a4e3f60f06379aa1253d616624d75156d0e78c3a7c13c04f89f763"
+    }
+  ],
+  "metadata_tests": [
+    {
+      "path": "tests/meta_shape_test.cpp",
+      "checks": 5
+    }
+  ]
+}
