@@ -1,0 +1,28 @@
+[
+    {
+        "op": "Transpose",
+        "input_desc": [
+            {
+                "name": "input",
+                "param_type": "required",
+                "format": ["ND", "ND", "ND", "ND"],
+                "type": ["float", "float16", "int32", "int8"]
+            }
+        ],
+        "output_desc": [
+            {
+                "name": "output",
+                "param_type": "required",
+                "format": ["ND", "ND", "ND", "ND"],
+                "type": ["float", "float16", "int32", "int8"]
+            }
+        ],
+        "attr": [
+            {
+                "name": "dims",
+                "param_type": "required",
+                "type": "list_int"
+            }
+        ]
+    }
+]
