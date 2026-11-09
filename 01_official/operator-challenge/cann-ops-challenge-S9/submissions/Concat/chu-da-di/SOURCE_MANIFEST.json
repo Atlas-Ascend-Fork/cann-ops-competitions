@@ -1,0 +1,47 @@
+{
+  "operator": "Concat",
+  "team": "锄大地",
+  "team_directory": "chu-da-di",
+  "source_version": "combo298 20260913",
+  "archive_name": "Concat.zip",
+  "archive_sha256": "63ed081d47b33ef7f0b86433f380614e912504beba3ecec9b5211f36182cbcfd",
+  "source_files": [
+    {
+      "path": "op_host/concat.cpp",
+      "archive_member": "Concat_zip/op_host/concat.cpp",
+      "bytes": 114882,
+      "sha256": "b7623d84e754aa9b09e7c11f6a5f5dec4b0d8ceae563f44f92e97334f55a04e4",
+      "archive_bytes": 114882,
+      "archive_sha256": "b7623d84e754aa9b09e7c11f6a5f5dec4b0d8ceae563f44f92e97334f55a04e4"
+    },
+    {
+      "path": "op_host/concat_tiling.h",
+      "archive_member": "Concat_zip/op_host/concat_tiling.h",
+      "bytes": 14495,
+      "sha256": "4e01b0c94c997b9d463c07d6ecf50a46abb4b6165a037ed7172e79c662a91253",
+      "archive_bytes": 14809,
+      "archive_sha256": "7328ec38af55e8ed9debbc49d2830cf63c269d9179d0a01a3f2d6167f9a43983"
+    },
+    {
+      "path": "op_kernel/concat.cpp",
+      "archive_member": "Concat_zip/op_kernel/concat.cpp",
+      "bytes": 190219,
+      "sha256": "371e71782c851ce99c9e48910fa8ffd72c4ad12016c1f98307428d69c11d371c",
+      "archive_bytes": 190219,
+      "archive_sha256": "371e71782c851ce99c9e48910fa8ffd72c4ad12016c1f98307428d69c11d371c"
+    }
+  ],
+  "preparation": "Only CRLF and repeated-CR line endings are normalized to LF; all other source bytes match the final online archive.",
+  "merge_adapters": [
+    {
+      "path": "op_host/infer_shape.cpp",
+      "sha256": "1e79a3f8d3b5a06d35ff309d9c8d68939e5c52fb72d31ce7a3c4f2cfc59cdfb6"
+    }
+  ],
+  "metadata_tests": [
+    {
+      "path": "tests/meta_shape_test.cpp",
+      "checks": 6
+    }
+  ]
+}
