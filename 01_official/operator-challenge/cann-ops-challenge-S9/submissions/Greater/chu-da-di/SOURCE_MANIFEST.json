@@ -1,0 +1,55 @@
+{
+  "operator": "Greater",
+  "team": "锄大地",
+  "team_directory": "chu-da-di",
+  "source_version": "generalized 20260912 215822",
+  "archive_name": "Greater.zip",
+  "archive_sha256": "a60a36e2fab625e98128cf5a73e0697256bbb52089558cc54686158be2076e75",
+  "source_files": [
+    {
+      "path": "op_kernel/greater_tiling.h",
+      "archive_member": "Greater_zip/op_kernel/greater_tiling.h",
+      "bytes": 2643,
+      "sha256": "89df2d35a0e5ea307c32cd14c03381593ae75bd59216b1bca5af06a4e801097d",
+      "archive_bytes": 2643,
+      "archive_sha256": "89df2d35a0e5ea307c32cd14c03381593ae75bd59216b1bca5af06a4e801097d"
+    },
+    {
+      "path": "op_kernel/greater.cpp",
+      "archive_member": "Greater_zip/op_kernel/greater.cpp",
+      "bytes": 157733,
+      "sha256": "748c6f606f94be26a971c7078a889bd87bf336a0198919fcdee5c75081350609",
+      "archive_bytes": 157733,
+      "archive_sha256": "748c6f606f94be26a971c7078a889bd87bf336a0198919fcdee5c75081350609"
+    },
+    {
+      "path": "op_host/greater_tiling.h",
+      "archive_member": "Greater_zip/op_host/greater_tiling.h",
+      "bytes": 2643,
+      "sha256": "89df2d35a0e5ea307c32cd14c03381593ae75bd59216b1bca5af06a4e801097d",
+      "archive_bytes": 2643,
+      "archive_sha256": "89df2d35a0e5ea307c32cd14c03381593ae75bd59216b1bca5af06a4e801097d"
+    },
+    {
+      "path": "op_host/greater.cpp",
+      "archive_member": "Greater_zip/op_host/greater.cpp",
+      "bytes": 56890,
+      "sha256": "5d5d747193b706e901c42af7fe1dbbdf9f0a878b7221437b70f6339287e30a60",
+      "archive_bytes": 56890,
+      "archive_sha256": "5d5d747193b706e901c42af7fe1dbbdf9f0a878b7221437b70f6339287e30a60"
+    }
+  ],
+  "preparation": "Only CRLF and repeated-CR line endings are normalized to LF; all other source bytes match the final online archive.",
+  "merge_adapters": [
+    {
+      "path": "op_host/infer_shape.cpp",
+      "sha256": "5249035d3b785806ab1411fc853c115abebdd0324902d774be0b7d547c7b3721"
+    }
+  ],
+  "metadata_tests": [
+    {
+      "path": "tests/meta_shape_test.cpp",
+      "checks": 5
+    }
+  ]
+}

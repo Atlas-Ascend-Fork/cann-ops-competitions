@@ -1,0 +1,42 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "CANN 8.5.0 Ascend 910B",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build_out",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_SKIP_RPATH": true,
+        "ASCEND_COMPUTE_UNIT": "ascend910b",
+        "vendor_name": "customize",
+        "ASCEND_CANN_PACKAGE_PATH": "$env{ASCEND_CANN_PACKAGE_PATH}",
+        "CMAKE_PREFIX_PATH": "$env{ASCEND_CANN_PACKAGE_PATH}/lib64/cmake;$env{ASCEND_CANN_PACKAGE_PATH}/compiler/tikcpp/ascendc_kernel_cmake"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "binary",
+      "configurePreset": "default",
+      "targets": [
+        "binary"
+      ],
+      "jobs": 4
+    },
+    {
+      "name": "package",
+      "configurePreset": "default",
+      "targets": [
+        "package"
+      ],
+      "jobs": 4
+    }
+  ]
+}
