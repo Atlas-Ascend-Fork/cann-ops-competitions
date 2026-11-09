@@ -1,0 +1,135 @@
+{
+  "operator": "Transpose",
+  "team": "锄大地",
+  "team_directory": "chu-da-di",
+  "source_version": "Snapshot10",
+  "archive_name": "Transpose.zip",
+  "archive_sha256": "79893a08fafbe356c14b298304b0b7c3f0deb3fd54d3f0a2864719745c0b48be",
+  "source_files": [
+    {
+      "path": "op_kernel/transpose.cpp",
+      "archive_member": "Transpose_zip/op_kernel/transpose.cpp",
+      "bytes": 85354,
+      "sha256": "99c3b9c07d9b8b0a3a7d2e5d078e148f6719334a49cf9674dc5ecf5da24687f7",
+      "archive_bytes": 85354,
+      "archive_sha256": "99c3b9c07d9b8b0a3a7d2e5d078e148f6719334a49cf9674dc5ecf5da24687f7"
+    },
+    {
+      "path": "op_kernel/transpose_row_aligned.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_row_aligned.h",
+      "bytes": 5120,
+      "sha256": "459fd124f4cfb44718e56d69c3a4e6a26fd19686e9e1540233349b19f1a8ef02",
+      "archive_bytes": 5120,
+      "archive_sha256": "459fd124f4cfb44718e56d69c3a4e6a26fd19686e9e1540233349b19f1a8ef02"
+    },
+    {
+      "path": "op_kernel/transpose_suffix_dma.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_suffix_dma.h",
+      "bytes": 2904,
+      "sha256": "c8b55883b529ab91db56dabb24a28d4cd61e67b246e3d7f7989e648c3e4c563a",
+      "archive_bytes": 2904,
+      "archive_sha256": "c8b55883b529ab91db56dabb24a28d4cd61e67b246e3d7f7989e648c3e4c563a"
+    },
+    {
+      "path": "op_kernel/transpose_l2_staged.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_l2_staged.h",
+      "bytes": 14303,
+      "sha256": "73b25b7029e577ab58cc9ba36746d31c195195d6399d39fc0b19f4195c999fe5",
+      "archive_bytes": 14303,
+      "archive_sha256": "73b25b7029e577ab58cc9ba36746d31c195195d6399d39fc0b19f4195c999fe5"
+    },
+    {
+      "path": "op_kernel/transpose_owner64.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_owner64.h",
+      "bytes": 12096,
+      "sha256": "2670558341ed287cf28baf3339eccc10b01c45b30bfadc08e92e79692cf2d9b7",
+      "archive_bytes": 12096,
+      "archive_sha256": "2670558341ed287cf28baf3339eccc10b01c45b30bfadc08e92e79692cf2d9b7"
+    },
+    {
+      "path": "op_kernel/transpose_direct_mask_unroll.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_direct_mask_unroll.h",
+      "bytes": 12104,
+      "sha256": "232acf55205eb215672901a26a1ca081930044226727bc0bf04a6b58ffdc7cfe",
+      "archive_bytes": 12104,
+      "archive_sha256": "232acf55205eb215672901a26a1ca081930044226727bc0bf04a6b58ffdc7cfe"
+    },
+    {
+      "path": "op_kernel/transpose_suffix_block.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_suffix_block.h",
+      "bytes": 7229,
+      "sha256": "2d3f38746502bdab4c9b19f9496bc321bd6c52120cbaf07b9441d7f58ec30c78",
+      "archive_bytes": 7229,
+      "archive_sha256": "2d3f38746502bdab4c9b19f9496bc321bd6c52120cbaf07b9441d7f58ec30c78"
+    },
+    {
+      "path": "op_kernel/transpose_direct_mask.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_direct_mask.h",
+      "bytes": 12034,
+      "sha256": "d51958104b4639fc81166fd258535fc49e904af1bc3c91d6df5e25b08c51127a",
+      "archive_bytes": 12034,
+      "archive_sha256": "d51958104b4639fc81166fd258535fc49e904af1bc3c91d6df5e25b08c51127a"
+    },
+    {
+      "path": "op_kernel/transpose_nocount.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_nocount.h",
+      "bytes": 12700,
+      "sha256": "26448072b05c1e20ccf9a11d0137bb9fbd01d62716daa0dfedc8b7302d3c8ea9",
+      "archive_bytes": 12700,
+      "archive_sha256": "26448072b05c1e20ccf9a11d0137bb9fbd01d62716daa0dfedc8b7302d3c8ea9"
+    },
+    {
+      "path": "op_kernel/transpose_macro.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_macro.h",
+      "bytes": 6436,
+      "sha256": "b77a3ce6308490d80ed70192a529198691c99423be054092e5384501f6444ac1",
+      "archive_bytes": 6436,
+      "archive_sha256": "b77a3ce6308490d80ed70192a529198691c99423be054092e5384501f6444ac1"
+    },
+    {
+      "path": "op_kernel/transpose_column_owner.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_column_owner.h",
+      "bytes": 12107,
+      "sha256": "8a60b52f7fa4f6cac80168d2b3a8b4b8fe10058c0387e6bdfcb319fe95167dab",
+      "archive_bytes": 12107,
+      "archive_sha256": "8a60b52f7fa4f6cac80168d2b3a8b4b8fe10058c0387e6bdfcb319fe95167dab"
+    },
+    {
+      "path": "op_kernel/transpose_int8_pairs.h",
+      "archive_member": "Transpose_zip/op_kernel/transpose_int8_pairs.h",
+      "bytes": 3556,
+      "sha256": "e774a6e4fcd4f08fd8583eb85a4c2fc0b038185463b4174ebaf34d6f4d67317f",
+      "archive_bytes": 3556,
+      "archive_sha256": "e774a6e4fcd4f08fd8583eb85a4c2fc0b038185463b4174ebaf34d6f4d67317f"
+    },
+    {
+      "path": "op_host/transpose.cpp",
+      "archive_member": "Transpose_zip/op_host/transpose.cpp",
+      "bytes": 66231,
+      "sha256": "b9b46deda5ee200ca248855527f6b1868119d6d3c5622eeaa91944a1aa24daf6",
+      "archive_bytes": 66231,
+      "archive_sha256": "b9b46deda5ee200ca248855527f6b1868119d6d3c5622eeaa91944a1aa24daf6"
+    },
+    {
+      "path": "op_host/transpose_tiling.h",
+      "archive_member": "Transpose_zip/op_host/transpose_tiling.h",
+      "bytes": 4211,
+      "sha256": "cf6612382795959afdc23e339c1a7f1c44ee7aae0d7e93de747169cd4f430191",
+      "archive_bytes": 4211,
+      "archive_sha256": "cf6612382795959afdc23e339c1a7f1c44ee7aae0d7e93de747169cd4f430191"
+    }
+  ],
+  "preparation": "Only CRLF and repeated-CR line endings are normalized to LF; all other source bytes match the final online archive.",
+  "merge_adapters": [
+    {
+      "path": "op_host/infer_shape.cpp",
+      "sha256": "3bd32b824f10a959ba45da1dbc52fc806a93a8364a55dfb21bd2fd4d7de22f36"
+    }
+  ],
+  "metadata_tests": [
+    {
+      "path": "tests/meta_shape_test.cpp",
+      "checks": 5
+    }
+  ]
+}
