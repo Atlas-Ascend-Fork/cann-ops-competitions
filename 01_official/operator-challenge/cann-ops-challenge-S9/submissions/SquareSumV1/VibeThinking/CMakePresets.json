@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 19,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build_out",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ASCEND_COMPUTE_UNIT": "ascend910b",
+                "vendor_name": "customize"
+            }
+        }
+    ]
+}
