@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "default",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build_out",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ASCEND_COMPUTE_UNIT": "ascend910b",
+                "ASCEND_CANN_PACKAGE_PATH": "$env{ASCEND_HOME_PATH}"
+            }
+        }
+    ]
+}
