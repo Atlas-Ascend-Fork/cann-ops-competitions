@@ -1,0 +1,8 @@
+# set custom compile options
+if ("${CMAKE_BUILD_TYPE}x" STREQUAL "Debugx")
+    add_ops_compile_options(ALL OPTIONS -g -O0)
+elseif ("${CMAKE_BUILD_TYPE}x" STREQUAL "Releasex")
+    add_ops_compile_options(ALL OPTIONS -O3)
+endif()
+
+add_kernels_compile()
