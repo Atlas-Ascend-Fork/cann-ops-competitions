@@ -316,6 +316,42 @@
 | 18 | 10月社区任务-daVinci-MagiHuman FA MXFP8 量化 |
 | 19 | 10月社区任务-Cosmos3模型T2I、I2I、T2V+Sound场景适配 |
 | 20 | 10月社区任务-Alpamayo-R1图模式与预取优化 |
+| 21 | 10月社区任务-aclsparseCgtsv2算子开发（950） |
+| 22 | 10月社区任务-aclsparseCgtsv2算子开发（A2/A3） |
+| 23 | 10月社区任务-aclblasCher算子开发（950） |
+| 24 | 10月社区任务-aclblasCher2算子开发（950） |
+| 25 | 10月社区任务-aclblasChpr算子开发（950） |
+| 26 | 10月社区任务-aclblasChpr2算子开发（950） |
+| 27 | 10月社区任务-aclblasChpmv算子开发（950） |
+| 28 | 10月社区任务-aclblasCsyrkx算子开发（950） |
+| 29 | 10月社区任务-aclblasCgemm3m算子开发（950） |
+| 30 | 10月社区任务-aclblasCgemm3mStridedBatched算子开发（950） |
+| 31 | 10月社区任务-aclblasCgemvBatched算子开发（950） |
+| 32 | 10月社区任务-aclblasHgemm算子开发（950） |
+| 33 | 10月社区任务-aclblasHgemmBatched算子开发（950） |
+| 34 | 10月社区任务-aclblasHgemmStridedBatched算子开发（950） |
+| 35 | 10月社区任务-aclblasGemmBatchedEx算子开发（A2/A3） |
+| 36 | 10月社区任务-aclblasGemmGroupedBatchedEx算子开发（A2/A3） |
+| 37 | 10月社区任务-aclblasLtMatmul算子开发（A2/A3） |
+| 38 | 10月社区任务-3个GemmEx类算子开发（A2/A3） |
+| 39 | 10月社区任务-Csyr2/cher2k/cherk算子精度修复（A2/A3） |
+| 40 | 10月社区任务-torch_npu支持kaiser_window接口（A2/A3/950） |
+
+### 11月份发放的任务
+
+| 任务编号 | 任务名称 |
+| --- | --- |
+| 1 | 11月社区任务-aclblasScasum算子开发（A2/A3） |
+| 2 | 11月社区任务-aclblasSaxpy算子开发（A2/A3） |
+| 3 | 11月社区任务-aclblasSrot算子开发（A2/A3） |
+| 4 | 11月社区任务-aclblasCrot算子开发（A2/A3） |
+| 5 | 11月社区任务-aclblasIcamax算子开发（A2/A3） |
+| 6 | 11月社区任务-aclblasIsamin算子开发（A2/A3） |
+| 7 | 11月社区任务-aclblasIcamin算子开发（A2/A3） |
+| 8 | 11月社区任务-aclblasSgemv算子开发（A2/A3） |
+| 9 | 11月社区任务-aclblasChemv算子开发（A2/A3） |
+| 10 | 11月社区任务-aclblasChbmv算子开发（A2/A3） |
+| 11 | 11月社区任务-开发一套面向0基础人群的PyPTO算子开发课程 |
 
 ## 参考链接
 社区任务发放页面：https://gitcode.com/org/cann/discussions/22
