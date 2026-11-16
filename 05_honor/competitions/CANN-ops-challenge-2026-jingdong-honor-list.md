@@ -2,8 +2,6 @@
 
 > 共 **21** 支队伍、**54** 名获奖者
 
-[官方获奖名单](https://competition.gitcode.com/competition/2094720514798379009/winner-list)
-
 ## 🥇 一等奖
 
 | 排名 | 队伍 | 成员 |
