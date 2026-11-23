@@ -57,8 +57,8 @@
 本仓库采用MIT开源协议。
 
 ## 🤝 联系我们
-- 竞赛论坛：https://gitcode.com/cann/cann-competitions/discussions
-- Issues：https://gitcode.com/cann/cann-competitions/issues
+- 竞赛论坛：https://gitcode.com/cann/cann-ops-competitions/discussions
+- Issues：https://gitcode.com/cann/cann-ops-competitions/issues
 
 ## 🙏 致谢
 感谢所有参与 CANN 开源社区竞赛的开发者和贡献者！
