@@ -2,7 +2,7 @@
 
 ## 需求背景
 
-[11 月社区任务](https://www.hiascend.com/activities/task-center/details/7a1275ee6b654459957fc27c8dde32b0)要求在 ops-blas 增加 arch22 的复数 Hermitian 压缩秩-2 更新，保留现有 arch35 实现及接口。
+[11 月社区任务](https://www.hiascend.com/activities/task-center/details/7a1275ee6b654459957fc27c8dde32b0)要求支持 arch22 的复数 Hermitian 压缩秩-2 更新。第二版以 ops-blas 的 `60d9d0b153e2` 为基线：`blas/spr2/arch22/chpr2_host.cpp` 已有实现，当前对 n=0 提前返回、非法 uplo 返回 INVALID_VALUE，且直接解引用 α。本版细化结构校验、连续 AP 分区和尾写。
 
 ## 需求分析
 
@@ -12,13 +12,17 @@
 
 ### Host 与分核
 
-保留公共 ABI，arch22 放在 `blas/spr2/arch22/`。检查句柄、n、α 指针、uplo、incx/incy（含 INT_MIN）；合法的 n=0 返回成功，随后检查 x/y/AP 与 α=0。采用 64 位计算上三角列起点 j(j+1)/2、下三角起点 j(2n−j+1)/2 和有符号向量地址。Host 标量按值传入；Device 标量在内核中判零。始终用 handle 的 stream 异步启动。
+保留公共 ABI，arch22 放在 `blas/spr2/arch22/`。依次检查句柄、n、α 指针、uplo、incx/incy（拒绝 0 和 INT_MIN）；非法 uplo 返回 INVALID_ENUM。合法的 n=0 返回成功，非空算例再检查 x/y/AP，保留现有字节跨度溢出检查。Host 标量按值传入；Device 标量按 `aclrtPointerGetAttributes` 分类并在 handle 的 stream 上由内核读取。α=0 路径在任何 AP/x/y 搬运前返回，包含对角虚部在内的 AP 位模式保持原样。
 
 将 AP 按连续且互不重叠的元素区间分核，边界倾向对齐写回块，同一列可横跨多个核。核对区间起点使用整数二分找列，再增量更新列界，不对每个元素做逆三角索引。当末尾不足一个搬运块时走精确长度搬运；不得用读改写触碰其他核的所有权区间。
+
+取 `P=n(n+1)/2`、`B=ceil(P/4)`、`C=min(AIV 核数,B)`。对非空算例，第 c 核的区间为 `[4·floor(cB/C), min(P,4·floor((c+1)B/C)))`。内部分界以 32 B 为单位，除全局尾块的截断外，各核的块数最多差 1。只有 AP 基址满足 DMA 对齐要求时才使用对齐批量写；未对齐片段或全局尾块走精确元素写。上三角列首位置为 `s(j)=j(j+1)/2`，下三角为 `s(j)=j(2n−j+1)/2`，两者的哨兵均为 `s(n)=P`。二分找到 `s(j)≤start<s(j+1)` 后，按列余量推进，首行分别是 `start−s(j)` 和 `j+start−s(j)`。
 
 ### Kernel 流水
 
 每个连续列段缓存 xⱼ/yⱼ，先算列系数 α·conj(yⱼ) 与 conj(α)·conj(xⱼ)，随后用 FP32 向量乘加并行计算 AP 段。连续向量直接搬运，跨步向量走逻辑索引加载；同一 UB tile 中重复使用列系数。对角采用专门的实部表达式；AP 输入按块拆分实虚，掩码写回有效项。按 UB 容量选择段长与双缓冲，小时延路径关闭双缓冲并合并短列。分核只依据 n、对齐与设备资源。
+
+以现有 1024 行 tile 路径作对照。AP 有效读写各 8P 字节；一次列系数装载读取 16 字节的 xⱼ/yⱼ。按 AP 连续分区时，单列被分区边界额外切分的总次数最多 C−1；报告因此增加的列系数装载，并单独统计不同列重复读取行向量的字节量。对照两条路径的每核元素数、AP 有效吞吐 `16P/kernel_seconds` 和时延；在 31/32/33、1023/1024/1025 及大规模档检查切分效果。在非零 α 路径对角虚部逐项检查为 `0x00000000`，在零 α 路径对整个 AP 和两端哨兵做逐字节比较。
 
 ## 可维可测分析
 
