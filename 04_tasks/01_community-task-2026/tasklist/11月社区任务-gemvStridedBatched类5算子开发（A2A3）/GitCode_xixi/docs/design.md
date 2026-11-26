@@ -2,7 +2,7 @@
 
 ## 需求背景
 
-[11 月社区任务](https://www.hiascend.com/activities/task-center/details/404250b6e18c4c3b853c73526ed0570f)要求 arch22 实现 `aclblas{S,HSH,HSS,TST,TSS}gemvStridedBatched`，采用固定间距批地址。
+[11 月社区任务](https://www.hiascend.com/activities/task-center/details/404250b6e18c4c3b853c73526ed0570f)要求 arch22 支持 `aclblas{S,HSH,HSS,TST,TSS}gemvStridedBatched`。第二版以 ops-blas 的 `60d9d0b153e2` 为基线：`blas/gemv_strided_batched/arch22/` 已有五种实现，当前主要按 batch 分核，Host 端先处理空形状、仅检查 stride 为正。本版细化跨度检查和小批大矩阵的分核。
 
 ## 需求分析
 
@@ -12,11 +12,17 @@
 
 ### Host 与地址计算
 
-沿用公共签名：handle、trans/m/n、α、A/lda/strideA、x/incx/stridex、β、y/incy/stridey、batchCount。校验 handle、trans、尺寸、lda、步长、stride、batchCount 及所需指针。stride 为 int64 元素数，必须为正；非空数组的一批占用至少覆盖 lda×n 或 1+(len−1)×|inc|，禁止相邻批重叠。用受检的 64 位运算计算负步长起点、末批偏移和总字节跨度，避免整数溢出。m/n/batchCount 为零时免读数据并允许数据基址为空；非法结构仍按仓库状态码返回。使用 handle 绑定的 stream。
+沿用公共签名和 handle 绑定的 stream。依次检查 handle、trans、m/n、lda、incx/incy、strideA/stridex/stridey、batchCount、α/β 指针；α/β 为 FP32 Host 标量。m/n/batchCount 为零时跳过实际占用和数据基址检查，直接返回。非空算例要求 A/x/y 为非空。
+
+矩阵占用为 `spanA=lda·n`，不随 trans 改变。向量占用为 `spanV=1+(len−1)·abs(inc)`；先转成 int64 再取绝对值。对三个操作数分别要求 `stride≥span`，并用受检乘加计算 `extent=(batchCount−1)·stride+span`，末元素索引是 `extent−1`。乘加先按内核的有符号索引上界检查，再检查 `extent≤SIZE_MAX/sizeof(T)`；A/x 使用输入类型宽度，y 使用输出类型宽度。负步长的第 k 个逻辑元素位于 `b·stride+(len−1)·abs(inc)+k·inc`。各批有效访问均落在本批占用内。
 
 ### Kernel 与批调度
 
 将 (batch, 输出 tile) 映射到核，每个输出 tile 单写者。先按 dtype 缩放批偏移，再按有符号 inc 处理逻辑向量坐标。N 路径分列段累计一组连续行输出，x 块在 UB 广播；T/C 路径读取连续行向量，做每个原始列的分段点积。tail 搬运采用有效范围描述，任何 stride 空隙和负步长洞均不覆盖。小矩阵将相邻 batch 连续分配到同核，复用调度和队列；大矩阵以输出范围铺核，避免跨核回写竞争。FP16/BF16 按位装载并转换到 FP32，最后一次舍入。α=0 跳过 A/x，β=0 直接写新值。依据 UB 实际容量切分两个输入缓冲与 FP32 累加缓冲。
+
+令 `L` 为输出长度、`T` 为输出 tile 长度、`Q=ceil(L/T)`。对 batch 数已覆盖可用核数的输入保留按批分派；对 `batchCount<AIV 核数` 且 `Q>1` 的大矩阵，把 `batchCount·Q` 个 tile 按连续编号均分，编号 q 对应 `batch=q/Q`、`tile=q%Q`。每个 tile 在核内完成完整归约，β 项只应用一次。T/C 中同一 tile 的多列点积共享一段 x；N 中各核读取独有的矩阵行段。报告重复读取的 x 字节量与核利用率，对 batch=1/2/4 分别比较原按批路径和新路径。
+
+`inc=1` 使用连续搬运；`inc=-1` 按连续地址加载，在 UB 反序，写回按物理地址顺序排列；`abs(inc)>1` 只写逻辑输出的精确地址。DMA 写入按实际基址对齐，存在未对齐边界时使用精确写，防止覆盖相邻 tile 或批间填充。HSH/TST 在 FP32 累加及 α/β 合并完成后只执行一次 round-to-nearest-even；HSS/TSS 与 S 直接写 FP32。验收增加 RNE 中点用例、T/C 逐项一致检查，以及取 `inc=INT_MIN`、极大 stride 验证拒绝溢出的 Host 单测。
 
 ## 可维可测分析
 
